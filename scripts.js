@@ -29,6 +29,8 @@ console.log ("The First step, I am going to create a line chart of unemployment 
 //USUNEMPLOYMENT is the local name of thejason file i just loaded
 //USUNEMPLOYMENT is the name i picked myself, can be any.
 
+var myKey = "&key=AIzaSyCanjIpR_ywL5C-JN0Wv7jmtkaqOuJJAlY";
+var myURL = "https://www.googleapis.com/fusiontables/v1/query?sql=SELECT+*+FROM+1tAbuVjBmg2V3kehcxjjHMdN5rzEmMTYzyG-_8jF5+WHERE+DATE>'";
 
 function dataLoaded(UNEMPDATA){
 	
@@ -54,13 +56,19 @@ function dataLoaded(UNEMPDATA){
 	var myLineChart = new google.visualization.LineChart(document.getElementById("linechartunempDiv"));
 	//copy paste the Div I created in the webpage
         myLineChart.draw(gDataTable,options);
-
-
-	var myLineChart = new google.visualization.LineChart(document.getElementById("linechartunempDiv2"));
-	//copy paste the Div I created in the webpage
-        myLineChart.draw(gDataTable,options);
 }
 
+function showNewData(e){
+	var myID = e.target.id;
+	//console.log(myID); 
+	var myNameArray = myID.split("_"); //split into array,"2000"will be second
+	var myYear = myNameArray[1]; //grab the year
+	
+	console.log(myYear);
+	var myWholeURL = myURL+myYear+"-01-01'"+myKey;
+	console.log(myWholeURL);
+	$.get(myWholeURL,dataLoaded,"json");
+}
 function googleLoaded(){
 	console.log("I can see line chart now.");
 	
@@ -70,9 +78,11 @@ function googleLoaded(){
 	//first is the name of the file
 	//second is the function to call once the file is loaded, I keep the "dataLoaded"
 	//third is a string of the file type to expect
-	 $.get("https://www.googleapis.com/fusiontables/v1/query?sql=SELECT+*+FROM+1tAbuVjBmg2V3kehcxjjHMdN5rzEmMTYzyG-_8jF5+WHERE+DATE>'1979-12-01'&key=AIzaSyCanjIpR_ywL5C-JN0Wv7jmtkaqOuJJAlY", dataLoaded,"json");
-
-	$.get("https://www.googleapis.com/fusiontables/v1/query?sql=SELECT+*+FROM+1tAbuVjBmg2V3kehcxjjHMdN5rzEmMTYzyG-_8jF5+WHERE+DATE>'1979-12-01'&key=AIzaSyCanjIpR_ywL5C-JN0Wv7jmtkaqOuJJAlY", dataLoaded2,"json");
+	
+	//is there somthing in the url that speicifies a particular year?
+	 $(".btn-success").on("click",showNewData);
+	 $("#year_1990").click();
+	 // $.get(myURL+"'1990-12-01'"+ myKey, dataLoaded,"json");
 }
 function pageLoaded(){
 	

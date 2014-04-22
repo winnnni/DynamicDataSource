@@ -43,9 +43,16 @@ function dataLoaded(UNEMPDATA){
 	//second parameter is the name of the column
 	gDataTable.addColumn('string', UNEMPDATA.columns[0]);
 	gDataTable.addColumn('number', UNEMPDATA.columns[1]);
+	gDataTable.addColumn({type: 'string', role: 'tooltip', 'p': {'html':true}});
 
 	gDataTable.addRows(UNEMPDATA.rows);
 	
+	var chartOptions = {
+		
+		width:600,
+		height:400,
+		tooltip: {isHtml: true}
+	};
 	//create options object to actually customeize
 	//I need a headline
 	var options = {
@@ -64,13 +71,25 @@ function showNewData(e){
 	var myNameArray = myID.split("_"); //split into array,"2000"will be second
 	var myYear = myNameArray[1]; //grab the year
 	
+	
+	History.pushState({year:myYear}, "Unemployment from -"+myYear, "?year="+myYear);
+	
 	console.log(myYear);
 	var myWholeURL = myURL+myYear+"-01-01'"+myKey;
 	console.log(myWholeURL);
 	$.get(myWholeURL,dataLoaded,"json");
 }
 function googleLoaded(){
-	console.log("I can see line chart now.");
+	
+	var myURL = History.getState().cleanUrl;
+	var queryArray = myURL.split("?"); //split the url on question mark
+	
+	var defaultYear="1990";
+	if(queryArray.length >1){
+		defaultYear = queryArray[1].split("=")[1];		
+	}
+	//Why do we need to test the length of the queryArray
+	//get the query string, break it on equals 
 	
 	
 	//use the jQeury get function to load my json file
@@ -81,7 +100,9 @@ function googleLoaded(){
 	
 	//is there somthing in the url that speicifies a particular year?
 	 $(".btn-success").on("click",showNewData);
-	 $("#year_1990").click();
+	 
+	 //grab by the button that the year is year_"defaultYear"
+	$("#year_" + defaultYear).click();
 	 // $.get(myURL+"'1990-12-01'"+ myKey, dataLoaded,"json");
 }
 function pageLoaded(){

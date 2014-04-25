@@ -1,9 +1,10 @@
 /**
  * @author
  */
-/* I was trying to find currency exchange rate data set, but failed.
- * So I am sticking with the unemployment data from class.
- * I am creating a line chart showing the unemployment rate since 1980.
+/* For this new assignment,I add two new buttons
+ * Update the URL for user-selected content
+ * If that URL is pasted into a new window, 
+ * the data that loads should be the same as was selected in the original window.
  */
 /*
  * program outline
@@ -56,8 +57,10 @@ function dataLoaded(UNEMPDATA){
 	//create options object to actually customeize
 	//I need a headline
 	var options = {
-          title: "Unemployment rate since 1980"
-        };
+          title: "Unemployment rate since 1980",
+          tooltip:{ textStyle: {color: 'red'}}
+      };
+     //I change the text color to red 
 
 	//figure out what type of chart i want
 	var myLineChart = new google.visualization.LineChart(document.getElementById("linechartunempDiv"));
@@ -65,6 +68,7 @@ function dataLoaded(UNEMPDATA){
         myLineChart.draw(gDataTable,options);
 }
 
+//the "e" event object to change the data URL based on the button
 function showNewData(e){
 	var myID = e.target.id;
 	//console.log(myID); 
